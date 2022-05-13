@@ -18,9 +18,19 @@
     "*.{css,vue}": "stylelint"
   },
   "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^6.0.0",
+    "@nuxtjs/fontawesome": "^1.1.2",
+    "@nuxtjs/toast": "^3.3.1",
     "core-js": "^3.15.1",
+    "debounce": "^1.2.1",
+    "fs": "^0.0.1-security",
+    "lodash": "^4.17.21",
     "nuxt": "^2.15.7",
-    "nuxt-highlightjs": "^1.0.1"
+    "nuxt-clipboard": "^0.0.7",
+    "nuxt-highlightjs": "^1.0.1",
+    "nuxt-property-decorator": "^2.9.1",
+    "vform": "^2.1.2",
+    "vue-checkbox-radio": "^0.6.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.14.7",
@@ -32,6 +42,8 @@
     "@nuxtjs/eslint-module": "^3.0.2",
     "@nuxtjs/stylelint-module": "^4.0.0",
     "@nuxtjs/tailwindcss": "^4.2.0",
+    "@types/debounce": "^1.2.1",
+    "@types/lodash": "^4.14.178",
     "@vue/test-utils": "^1.2.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^27.0.5",
@@ -44,6 +56,7 @@
     "lint-staged": "^10.5.4",
     "postcss": "^8.3.5",
     "prettier": "^2.3.2",
+    "raw-loader": "^4.0.2",
     "stylelint": "^13.13.1",
     "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-standard": "^22.0.0",
