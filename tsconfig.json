@@ -25,7 +25,13 @@
     },
     "types": [
       "@nuxt/types",
-      "@types/node"
+      "@types/node",
+      "@nuxtjs/tailwindcss",
+      "@nuxtjs/toast",
+      "vform",
+      "nuxt-clipboard",
+      "@types/debounce",
+
     ]
   },
   "exclude": [
