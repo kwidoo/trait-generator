@@ -21,7 +21,7 @@
     "core-js": "^3.23.1",
     "nuxt": "^2.15.7",
     "nuxt-clipboard": "^0.0.7",
-    "nuxt-highlightjs": "^1.0.1",
+    "nuxt-highlightjs": "^1.0.3",
     "nuxt-property-decorator": "^2.9.1",
     "vform": "^2.1.2",
     "vue-checkbox-radio": "^0.6.0"
@@ -45,7 +45,7 @@
     "eslint-plugin-vue": "^9.1.1",
     "husky": "^7.0.4",
     "jest": "^27.5.1",
-    "lint-staged": "^13.0.2",
+    "lint-staged": "^13.0.3",
     "postcss": "^8.4.14",
     "prettier": "^2.7.1",
     "stylelint": "^14.9.1",
