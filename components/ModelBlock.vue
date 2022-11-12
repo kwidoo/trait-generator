@@ -4,7 +4,7 @@
       <ModelInput
         v-model="response.model"
         :class="order[0]"
-        placeholder="Model..."
+        :placeholder="placeholder"
         @input="onInput"
       />
       <ModelInput
@@ -30,41 +30,41 @@ import ClassModelInput from '~/components/ModelInput.vue'
 import ClassArrow from '~/components/Arrow.vue'
 
 export class ClassBlockValue {
-  _model: String | null
-  _foreignKey1: String | null
-  _foreignKey2: String | null | null
+  _model: string | null
+  _foreignKey1: string | null
+  _foreignKey2: string | null | null
 
   constructor(
-    model: String | null = null,
-    foreignKey1: String | null = null,
-    foreignKey2: String | null = null
+    model: string | null = null,
+    foreignKey1: string | null = null,
+    foreignKey2: string | null = null
   ) {
     this._model = model
     this._foreignKey1 = foreignKey1
     this._foreignKey2 = foreignKey2
   }
 
-  get model(): String | null {
+  get model(): string | null {
     return this._model
   }
 
-  set model(value: String | null) {
+  set model(value: string | null) {
     this._model = value
   }
 
-  get foreignKey1(): String | null {
+  get foreignKey1(): string | null {
     return this._foreignKey1
   }
 
-  set foreignKey1(value: String | null) {
+  set foreignKey1(value: string | null) {
     this._foreignKey1 = value
   }
 
-  get foreignKey2(): String | null {
+  get foreignKey2(): string | null {
     return this._foreignKey2
   }
 
-  set foreignKey2(value: String | null) {
+  set foreignKey2(value: string | null) {
     this.foreignKey2 = value
   }
 }
@@ -77,12 +77,13 @@ export default class ClassModelBlock extends Vue {
 
   @Prop() last!: boolean
   @Prop() type!: Number
+  @Prop() placeholder: string = 'Order...'
 
   onInput() {
     this.$emit('changed')
   }
 
-  get order(): Array<String> {
+  get order(): Array<string> {
     if (this.type === 1) {
       return ['order-3', 'order-2', 'order-1']
     }
