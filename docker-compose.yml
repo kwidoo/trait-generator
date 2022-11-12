@@ -1,0 +1,16 @@
+# for local development
+version: '3.7'
+services:
+  frontend:
+    build: .
+    restart: unless-stopped
+    hostname: trait
+    container_name: trait
+    volumes:
+      - .:/app
+    networks:
+      - nginx-proxy_default
+
+networks:
+  nginx-proxy_default:
+    external: true

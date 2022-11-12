@@ -1,5 +1,5 @@
 <template>
-  <span v-if="last === false" class="mx-2 text-xl"> &rarr; </span>
+  <span v-if="last === false" class="mx-2 text-xl"> </span>
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator'

@@ -1,4 +1,5 @@
-/**
+
+  /**
    * @param Builder $query
    * @param <model-studly> $order
    *
@@ -6,7 +7,7 @@
    */
   public function scopeBy<model-studly>(Builder $query, <model-studly> $<model-camel>): void
   {
-    $query->where(<model-upper>, $<model-camel>->id);
+    $query->where(<foreign-key1>, $<model-camel>->id);
   }
 
   /**
@@ -17,5 +18,5 @@
    */
   public function scopeBy<model-studly>Id(Builder $query, int $id): void
   {
-    $query->where(<model-upper>, $id);
+    $query->where(<foreign-key1>, $id);
   }

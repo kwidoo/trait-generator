@@ -6,7 +6,7 @@
 </template>
 <script lang="ts">
 import Vue from 'vue'
-import navigation from '~/components/navigation.vue'
+import navigation from '~/components/NavComponent.vue'
 export default Vue.extend({
   components: { navigation },
 })

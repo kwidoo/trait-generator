@@ -5,12 +5,14 @@
         v-model="form.fromModel"
         :last="false"
         :type="0"
+        placeholder="Order.."
         @changed="check"
       />
       <ModelBlock
         v-model="form.toModel"
         :last="true"
         :type="2"
+        placeholder="User.."
         @changed="check"
       />
     </div>
@@ -49,23 +51,33 @@
         class="text-white absolute top-10 right-5"
       />
       <pre>
-        <code :key="keyValue" v-highlight class="php rounded-md font-mono"  >{{ data }}
+        <code :key="keyValue" v-highlight class="php rounded-md font-mono"  >{{ model }}
+        </code>
+      </pre>
+      <pre v-if="showConstants">
+        <code :key="keyValue" v-highlight class="php rounded-md font-mono"  >{{ consts }}
+        </code>
+      </pre>
+      <pre v-if="formReverseHasOne || formReverseHasMany">
+        <code :key="keyValue" v-highlight class="php rounded-md font-mono"  >{{ reverseModel }}
         </code>
       </pre>
     </div>
   </div>
 </template>
 <script lang="ts">
-import _ from 'lodash'
 import VForm from 'vform'
 import { Radio, Checkbox } from 'vue-checkbox-radio'
-import { Component, Vue } from 'nuxt-property-decorator'
+import { Component, Vue, Watch } from 'nuxt-property-decorator'
+import Substitute from '../processing/substitute'
 import ClassModelBlock, { ClassBlockValue } from '~/components/ModelBlock.vue'
 // @ts-ignore
 import trait from '~/static/belongs-to.php'
 // @ts-ignore
-import scopes from '~/static/scopes.php'
-
+import reverseHasOne from '~/static/has-one.php'
+// @ts-ignore
+import constants from '~/static/const.php'
+// @ts-ignore
 @Component({
   components: {
     ModelBlock: ClassModelBlock,
@@ -74,7 +86,12 @@ import scopes from '~/static/scopes.php'
   },
 })
 export default class ClassBelongsTo extends Vue {
-  data: String = trait
+  model: string = ''
+  reverseModel: string = ''
+  consts: string = constants
+
+  modelName: string = 'Order'
+  modelReverseName: string = 'User'
   codeKey = 0
 
   form: VForm = this.$vform({
@@ -85,50 +102,87 @@ export default class ClassBelongsTo extends Vue {
     toModel: new ClassBlockValue(),
   })
 
-  check(): void {
-    let scopeCode = scopes
-    if (this.form.scopes === false) {
-      scopeCode = ''
-    }
-
-    this.codeKey++
-    this.data = trait
-    this.data = this.data.replace('<scopes>', scopeCode)
-
-    this.data = this.data.replaceAll(
-      '<model-studly>',
-      _.upperFirst(_.camelCase(this.form.fromModel.model))
-    )
-    this.data = this.data.replaceAll(
-      '<traitName>',
-      'BelongsTo' + _.upperFirst(_.camelCase(this.form.fromModel.model))
-    )
-
-    let foreignKey: string = `constant(self::${_.toUpper(
-      this.form.fromModel.model
-    )}_FOREIGN_KEY)`
-    if (this.form.fromModel.foreignKey1 !== null) {
-      foreignKey = `'${_.snakeCase(this.form.fromModel.foreignKey1)}'`
-    }
-    this.data = this.data.replaceAll('<model-upper>', foreignKey)
-    this.data = this.data.replaceAll(
-      '<model-snake>',
-      _.snakeCase(_.kebabCase(this.form.fromModel.model))
-    )
-    this.data = this.data.replaceAll(
-      '<model-camel>',
-      _.camelCase(this.form.fromModel.model)
-    )
-
-    this.data = this.data.replace('<model-folder>', '')
+  @Watch('model')
+  onModelChange() {
+    this.check()
   }
 
-  get keyValue(): String {
+  @Watch('model')
+  @Watch('reverseModel')
+  @Watch('form.fromModel.foreignKey1')
+  @Watch('form.fromModel.foreignKey2')
+  @Watch('form.toModel.foreignKey1')
+  @Watch('form.toModel.foreignKey2')
+  @Watch('form.scopes')
+  @Watch('form.reverse')
+  onChange() {
+    this.check()
+  }
+
+  mounted() {
+    this.check()
+  }
+
+  check(): void {
+    this.codeKey++
+
+    if (this.form.fromModel.model !== null) {
+      this.modelName = this.form.fromModel.model
+    }
+    if (this.form.toModel.model !== null) {
+      this.modelReverseName = this.form.toModel.model
+    }
+    this.model = new Substitute(
+      trait,
+      this.modelName,
+      this.modelReverseName,
+      this.form.fromModel.foreignKey1,
+      this.form.toModel.foreignKey1,
+      this.form.scopes
+    ).traitFilled
+
+    // if (this.showConstants) {
+    //   this.consts = new Substitute(
+    //     constants,
+    //     this.model,
+    //     this.model,
+    //     this.model,
+    //     this.form.scopes
+    //   ).traitFilled
+    // }
+    if (this.formReverseHasOne) {
+      this.reverseModel = new Substitute(
+        reverseHasOne,
+        this.modelReverseName,
+        this.model,
+        this.form.fromModel.foreignKey1,
+        this.form.toModel.foreignKey2,
+        this.form.scopes
+      ).traitFilled
+    }
+  }
+
+  get keyValue(): string {
     return 'code-' + this.codeKey
   }
 
+  get showConstants(): boolean {
+    return (
+      this.form.fromModel.foreignKey1 === null ||
+      this.form.fromModel.foreignKey1 === ''
+    )
+  }
+
+  get formReverseHasOne(): boolean {
+    return this.form.reverse && this.form.type === 'hasOne'
+  }
+
+  get formReverseHasMany(): boolean {
+    return this.form.reverse && this.form.type === 'hasMany'
+  }
+
   async copy(): Promise<void> {
-    await this.$copyText(this.data)
+    await this.$copyText(this.model)
     this.$toast.success('Copied')
   }
 }
