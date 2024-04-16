@@ -23,7 +23,7 @@
     "@nuxtjs/fontawesome": "^1.1.2",
     "@nuxtjs/toast": "^3.3.1",
     "core-js": "^3.29.1",
-    "debounce": "^1.2.1",
+    "debounce": "^2.0.0",
     "fs": "^0.0.1-security",
     "lodash": "^4.17.21",
     "nuxt": "^2.15.7",
